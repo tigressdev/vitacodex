@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vitacodex — DNA Explorer</title>
+<style>
+:root {
+  --bg: #f4f5f5;
+  --panel: #ffffff;
+  --panel-soft: #eef2f0;
+  --text: #111111;
+  --muted: #5f6865;
+  --border: #dbe3df;
+  --green: #18c56e;
+  --green-dark: #0f8e57;
+  --green-soft: #85b8a8;
+  --orange: #f28a22;
+  --purple: #b846ff;
+  --blue: #3f6df6;
+  --teal: #12b9b2;
+  --red: #e45858;
+  --shadow: 0 10px 30px rgba(16, 24, 20, 0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #f6f7f7 0%, #f1f5f3 100%);
+  color: var(--text);
+}
+a { color: inherit; text-decoration: none; }
+.page {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 28px 28px 60px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.brand { font-size: 32px; letter-spacing: -0.05em; line-height: 1; font-weight: 400; }
+.brand .vita { color: var(--green); }
+.brand .codex { color: #0b0b0b; }
+.nav { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 12px; color: #111; opacity: 0.72; transition: .18s ease;
+}
+.nav-item:hover, .nav-item.active { opacity: 1; }
+.nav-item.active .label { color: var(--green-dark); }
+.nav-item svg { width: 50px; height: 50px; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.hero-copy {
+  padding: 30px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8f7ee;
+  color: var(--green-dark);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+h1 {
+  margin: 0 0 12px;
+  font-size: 46px;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+.hero-copy p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 56ch;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-primary { background: var(--green); color: white; }
+.btn-secondary { background: white; border: 1px solid var(--border); color: #111; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.stat {
+  background: rgba(255,255,255,.82);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat strong {
+  display: block;
+  font-size: 28px;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat span { font-size: 12px; color: var(--muted); }
+.stat.s1 strong { color: var(--green-dark); }
+.stat.s2 strong { color: var(--orange); }
+.stat.s3 strong { color: var(--blue); }
+.stat.s4 strong { color: var(--purple); }
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.section-card { padding: 22px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+.section-head span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.meta-box {
+  margin-top: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  border-radius: 10px;
+  padding: 8px 10px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.stack { display: grid; gap: 12px; }
+.signal-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: #fcfffd;
+}
+.signal-card.orange { border-left-color: var(--orange); }
+.signal-card.purple { border-left-color: var(--purple); }
+.signal-card.blue { border-left-color: var(--blue); }
+.signal-card.teal { border-left-color: var(--teal); }
+.signal-card.red { border-left-color: var(--red); }
+.signal-card h4, .signal-card h5 { margin: 0 0 6px; font-size: 16px; }
+.signal-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.pill-row, .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.pill, .chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #eef7f2;
+  color: var(--green-dark);
+  border: 1px solid #d9eee3;
+}
+.list { display: grid; gap: 10px; }
+.list-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.list-icon {
+  width: 42px; height: 42px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: #eef7f2; border: 1px solid #d9eee3; color: var(--green-dark);
+  font-size: 18px; font-weight: 700;
+}
+.list-item strong { display: block; font-size: 14px; margin-bottom: 3px; }
+.list-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.footer-cta {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.footer-cta h3 { margin: 0 0 6px; font-size: 24px; letter-spacing: -0.04em; }
+.footer-cta p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 60ch; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f8f5;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.progress {
+  margin-top: 12px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e6ece9;
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8ad8ae 0%, #18c56e 65%, #0f8e57 100%);
+}
+@media (max-width: 1140px) {
+  .hero, .section { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .topbar { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 760px) {
+  .page { padding: 18px 18px 40px; }
+  .stats { grid-template-columns: 1fr; }
+  h1 { font-size: 34px; }
+  .footer-cta { flex-direction: column; align-items: flex-start; }
+}
+
+.cluster-map {
+  background: white; border: 1px solid var(--border); border-radius: 24px; padding: 20px; min-height: 420px; position: relative; overflow: hidden;
+}
+.cluster-map h3 { margin:0 0 14px; font-size:16px; letter-spacing:-0.03em; }
+.lines svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.orb {
+  position:absolute; width:112px; height:112px; border-radius:50%; display:grid; place-items:center; text-align:center; padding:14px; color:white;
+  font-size:12px; font-weight:700; line-height:1.25; box-shadow:0 10px 24px rgba(0,0,0,.08); cursor:pointer; transition:.18s ease; border:none;
+}
+.orb:hover,.orb.active { transform:scale(1.04); box-shadow:0 16px 28px rgba(0,0,0,.12); outline:4px solid rgba(24,197,110,.14); }
+.orb small { display:block; font-size:10px; opacity:.92; margin-top:4px; font-weight:600; }
+.o-met { top:112px; left:36px; background:linear-gradient(135deg,#17c96e,#0f8e57); }
+.o-neu { top:54px; right:110px; background:linear-gradient(135deg,#b846ff,#7c31b2); }
+.o-cardio { bottom:54px; right:52px; background:linear-gradient(135deg,#f28a22,#cf6410); }
+.o-micro { bottom:74px; left:142px; background:linear-gradient(135deg,#3f6df6,#214ac4); }
+.o-perf { top:210px; right:228px; background:linear-gradient(135deg,#12b9b2,#0b8e89); }
+.center-node { position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; }
+.center-core {
+  width:128px; height:128px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffffff 0%, #f1faf5 42%, #d8f1e3 100%);
+  border:1px solid var(--border); display:grid; place-items:center; text-align:center; padding:12px; box-shadow:0 14px 32px rgba(24,197,110,.14);
+}
+.center-core strong { display:block; font-size:15px; line-height:1.15; } .center-core span { font-size:11px; color:var(--muted); }
+.insight-top { display:grid; grid-template-columns: 1fr 120px; gap:14px; margin-bottom:14px; }
+.insight-box { background:#f8fbf9; border:1px solid var(--border); border-radius:18px; padding:16px; }
+.insight-box h3 { margin:0 0 8px; font-size:18px; letter-spacing:-0.03em; }
+.insight-box p { margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
+.model-box { display:grid; place-items:center; background:linear-gradient(180deg,#ffffff 0%,#f1f8f4 100%); border:1px solid var(--border); border-radius:18px; padding:12px; text-align:center; }
+.model-box strong { font-size:28px; line-height:1; color:var(--green-dark); } .model-box span { font-size:11px; color:var(--muted); }
+@media (max-width:760px) { .cluster-map { min-height:470px; } .orb { transform:scale(.84); } .insight-top { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="topbar">
+  <div class="brand"><span class="vita">vita</span><span class="codex">codex</span></div>
+  <nav class="nav">
+    <a class="nav-item " href="/demoapp/home">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M10 33L32 12L54 33" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 28V52H47V28" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 35C26 31.5 29 29 32 29C35 29 38 31.5 38 35C38 39 34 41 32 43C30 41 26 39 26 35Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+      </svg>
+      <div class="label">HOME</div>
+    </a>
+    <a class="nav-item active" href="/demoapp/dna-explorer">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M22 10C13 18 13 46 22 54" stroke="#18c56e" stroke-width="4" stroke-linecap="round"/>
+        <path d="M42 10C51 18 51 46 42 54" stroke="#8bb8a8" stroke-width="4" stroke-linecap="round"/>
+        <path d="M23 16L41 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M41 16L23 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M27 22H37M25 32H39M27 42H37" stroke="#18c56e" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="label">DNA EXPLORER</div>
+    </a>
+    <a class="nav-item " href="/demoapp/clinical-sync">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M15 12V52H49V18L43 12H15Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M39 12V20H49" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M11 22V16C11 13.8 12.8 12 15 12H18" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M11 24V31" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M26 28H39M26 34H39M26 40H36" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M23 24C23 25.7 21.7 27 20 27C18.3 27 17 25.7 17 24C17 22.3 18.3 21 20 21C21.7 21 23 22.3 23 24Z" stroke="#18c56e" stroke-width="3"/>
+      </svg>
+      <div class="label">CLINICAL SYNC</div>
+    </a>
+    <a class="nav-item " href="/demoapp/target">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="20" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="12" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="4" stroke="#18c56e" stroke-width="4"/>
+      </svg>
+      <div class="label">TARGET</div>
+    </a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="card hero-copy">
+    <div class="eyebrow">DNA Explorer · clusters clicáveis</div>
+    <h1>Explore SNPs por grupos funcionais, não por lista crua.</h1>
+    <p>Nesta simulação, cada cluster representa um agrupamento de SNPs conectados a uma função biológica. Ao clicar em um cluster, o usuário vê a leitura interpretada e um score de confiança traduzido para linguagem útil.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary">Testar visão interativa</button>
+      <a class="btn btn-secondary" href="/demoapp/home">Voltar para Home</a>
+    </div>
+    <div class="stats">
+      <div class="stat s1"><strong>32</strong><span>SNPs avaliados</span></div>
+      <div class="stat s2"><strong>6</strong><span>clusters ativos</span></div>
+      <div class="stat s3"><strong>5</strong><span>insights mapeados</span></div>
+      <div class="stat s4"><strong>81%</strong><span>confiança média dos clusters</span></div>
+    </div>
+  </div>
+
+  <div class="card section-card" style="padding:24px;">
+    <div class="badge" id="activeClusterChip">Cluster ativo: Metabolismo</div>
+    <div class="cluster-map" style="margin-top:14px;">
+      <h3>Mapa interativo de clusters</h3>
+      <div class="lines">
+        <svg viewBox="0 0 700 430" fill="none" preserveAspectRatio="none">
+          <path d="M350 215 C260 180, 170 185, 98 162" stroke="#d9e9e1" stroke-width="2"/>
+          <path d="M350 215 C425 128, 505 110, 565 108" stroke="#ecdff9" stroke-width="2"/>
+          <path d="M350 215 C505 238, 585 288, 618 318" stroke="#fde8d7" stroke-width="2"/>
+          <path d="M350 215 C250 292, 196 322, 168 340" stroke="#dde7fb" stroke-width="2"/>
+          <path d="M350 215 C390 252, 438 220, 478 250" stroke="#d9f3f2" stroke-width="2"/>
+        </svg>
+      </div>
+      <button class="orb o-met active" data-key="metabolismo">Metabolismo<small>4 SNPs</small></button>
+      <button class="orb o-neu" data-key="neuro">Neurociência<small>4 SNPs</small></button>
+      <button class="orb o-cardio" data-key="cardio">Cardiovascular<small>5 SNPs</small></button>
+      <button class="orb o-micro" data-key="micro">Micronutrientes<small>3 SNPs</small></button>
+      <button class="orb o-perf" data-key="performance">Performance<small>2 SNPs</small></button>
+      <div class="center-node"><div class="center-core"><strong>DNA Explorer</strong><span>clique e compare sinais</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card section-card">
+    <div class="section-head"><h2>Insight do cluster selecionado</h2><span id="clusterSubtitle">simulação explicável para o usuário</span></div>
+    <div class="insight-top">
+      <div class="insight-box">
+        <h3 id="clusterTitle">Metabolismo & glicemia</h3>
+        <p id="clusterDescription">Cluster dominante para carboidratos, resposta glicêmica e risco metabólico. Reúne sinais que impactam energia, fome e sensibilidade à insulina.</p>
+      </div>
+      <div class="model-box"><strong id="clusterConfidence">88%</strong><span>confiança do modelo</span></div>
+    </div>
+    <div class="stack">
+      <div class="signal-card">
+        <h4>O que isso significa para Carolina</h4>
+        <p id="userInsightText">Seu cluster sugere maior sensibilidade a picos glicêmicos. Isso não é diagnóstico, mas indica que sua rotina responde melhor a refeições com menor carga glicêmica.</p>
+        <div class="meta-box" id="clusterMeta">Modelo interno: score elevado por combinação entre TCF7L2 + PPARG + SLC2A2 · leitura simplificada para o usuário</div>
+      </div>
+      <div class="signal-card orange">
+        <h4>Próxima ação sugerida</h4>
+        <p id="actionText">Priorizar café da manhã com proteína e reduzir concentração de carboidratos simples no fim do dia.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card section-card">
+    <div class="section-head"><h2>Leitura de confiabilidade</h2><span>resultado técnico traduzido</span></div>
+    <div class="stack">
+      <div class="signal-card">
+        <h4>Confiança interpretável para o usuário</h4>
+        <p id="confidenceNarrative">Alta consistência entre SNPs do cluster e literatura curada. A confiança está elevada porque há coerência biológica entre os marcadores.</p>
+        <div class="progress"><span id="confidenceBar" style="width:88%"></span></div>
+        <div class="chips" id="confidenceChips">
+          <span class="chip">coerência entre marcadores</span>
+          <span class="chip">efeito replicado</span>
+          <span class="chip">baixa contradição interna</span>
+        </div>
+      </div>
+      <div class="signal-card blue">
+        <h4>SNPs usados nesta leitura</h4>
+        <div class="meta-box" id="snpList">rs7903146 · TCF7L2 · CT
+rs1801282 · PPARG · GG
+rs5400 · SLC2A2 · AA</div>
+      </div>
+      <div class="signal-card purple">
+        <h4>Como isso apareceria no produto</h4>
+        <p id="productTranslation">Em vez de mostrar “regressão logística = 0,88”, o produto mostra “há forte suporte para uma tendência glicêmica que merece rotina mais estável”.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="footer-cta card">
+  <div>
+    <h3>Do cluster ao conselho acionável.</h3>
+    <p>A camada de modelo pode usar score composto ou regressão por trás. Mas a interface do Vitacodex traduz isso em confiança compreensível, impacto pessoal e próxima decisão.</p>
+  </div>
+  <div class="hero-actions" style="margin-top:0;">
+    <a class="btn btn-primary" href="/demoapp/clinical-sync">Ir para Clinical Sync</a>
+    <a class="btn btn-secondary" href="/demoapp/target">Ir para Target</a>
+  </div>
+</section>
+</div>
+
+<script>
+const clusterData = {
+  metabolismo: {
+    chip: 'Cluster ativo: Metabolismo',
+    subtitle: 'cluster dominante em carboidratos, insulina e resposta metabólica',
+    title: 'Metabolismo & glicemia',
+    description: 'Cluster dominante para carboidratos, resposta glicêmica e risco metabólico. Reúne sinais que impactam energia, fome e sensibilidade à insulina.',
+    confidence: '88%',
+    userInsight: 'Seu cluster sugere maior sensibilidade a picos glicêmicos. Isso não é diagnóstico, mas indica que sua rotina responde melhor a refeições com menor carga glicêmica.',
+    meta: 'Modelo interno: score elevado por combinação entre TCF7L2 + PPARG + SLC2A2 · leitura simplificada para o usuário',
+    action: 'Priorizar café da manhã com proteína e reduzir concentração de carboidratos simples no fim do dia.',
+    confidenceNarrative: 'Alta consistência entre SNPs do cluster e literatura curada. A confiança está elevada porque há coerência biológica entre os marcadores.',
+    chips: ['coerência entre marcadores','efeito replicado','baixa contradição interna'],
+    snps: 'rs7903146 · TCF7L2 · CT\nrs1801282 · PPARG · GG\nrs5400 · SLC2A2 · AA',
+    translation: 'Em vez de mostrar “regressão logística = 0,88”, o produto mostra “há forte suporte para uma tendência glicêmica que merece rotina mais estável”.'
+  },
+  neuro: {
+    chip: 'Cluster ativo: Neurociência',
+    subtitle: 'foco, estresse, sono e processamento cognitivo',
+    title: 'Neurociência & foco',
+    description: 'Cluster associado a dopamina, resposta ao estresse, sono e perfil cognitivo.',
+    confidence: '79%',
+    userInsight: 'Seu perfil sugere boa capacidade de foco, mas também maior sensibilidade a estresse agudo.',
+    meta: 'Modelo interno: combinação entre COMT + BDNF + CLOCK com sinal moderado e interpretação dependente de contexto',
+    action: 'Estabilizar sono, reduzir picos de demanda cognitiva no fim do dia.',
+    confidenceNarrative: 'Confiança moderada-alta. O cluster tem coerência funcional, mas a expressão prática depende mais de rotina e ambiente.',
+    chips: ['efeito moderado','dependente de contexto','alta utilidade comportamental'],
+    snps: 'rs4680 · COMT · GA\nrs6265 · BDNF · GA\nrs1801260 · CLOCK · CT',
+    translation: 'O usuário não vê “coeficiente beta”. Ele vê “seu foco é bom, mas se deteriora sob estresse e sono ruim”.'
+  },
+  cardio: {
+    chip: 'Cluster ativo: Cardiovascular',
+    subtitle: 'triglicérides, lipídios e risco familiar',
+    title: 'Cardiovascular & lipídios',
+    description: 'Cluster orientado para triglicérides, perfil lipídico e risco familiar.',
+    confidence: '91%',
+    userInsight: 'Aqui há um dos sinais mais sólidos do perfil. O cluster sugere atenção estruturada a triglicérides e resposta a padrões alimentares.',
+    meta: 'Modelo interno: APOE + APOA5 com forte sinal composto em literatura',
+    action: 'Priorizar integração com exames de colesterol e triglicérides.',
+    confidenceNarrative: 'Confiança alta. Há replicação consistente dos marcadores usados e boa convergência entre os SNPs.',
+    chips: ['alta replicação','ação clínica possível','bom match com exames'],
+    snps: 'rs429358 · APOE · CC\nrs7412 · APOE · TT\nrs662799 · APOA5 · TT',
+    translation: 'Na interface, isso aparece como “forte suporte para eixo lipídico prioritário”.'
+  },
+  micro: {
+    chip: 'Cluster ativo: Micronutrientes',
+    subtitle: 'vitaminas, ferro e suporte nutricional',
+    title: 'Micronutrientes',
+    description: 'Cluster de suporte para vitaminas e minerais com impacto em energia.',
+    confidence: '74%',
+    userInsight: 'Este cluster é útil para direcionar perguntas clínicas, mas exige mais contexto laboratorial.',
+    meta: 'Modelo interno: VDR + HFE + SLC23A1 com heterogeneidade de evidência',
+    action: 'Usar este cluster para guiar pedidos de exame, especialmente ferro, B12 e vitamina D.',
+    confidenceNarrative: 'Confiança moderada. O cluster é biologicamente plausível, porém parte dos marcadores depende de confirmação clínica.',
+    chips: ['bom para triagem','depende de exame','heterogeneidade de evidência'],
+    snps: 'rs1544410 · VDR · GA\nrs1800562 · HFE · AG\nrs11950646 · SLC23A1 · GG',
+    translation: 'No produto, isso vira “vale investigar este eixo”, e não “você precisa suplementar agora”.'
+  },
+  performance: {
+    chip: 'Cluster ativo: Performance',
+    subtitle: 'força, resistência e adaptabilidade física',
+    title: 'Performance & resposta física',
+    description: 'Cluster de leitura física com foco em potência, resistência e resposta a treino.',
+    confidence: '68%',
+    userInsight: 'O cluster indica perfil relativamente versátil. O produto traduz isso como adaptabilidade com pequenas preferências de resposta ao esforço.',
+    meta: 'Modelo interno: ACTN3 + PPARD com evidência útil, mas menor robustez clínica',
+    action: 'Usar este cluster para calibrar metas e linguagem de treino.',
+    confidenceNarrative: 'Confiança moderada. O cluster ajuda mais na personalização de metas do que em grandes decisões clínicas.',
+    chips: ['uso comportamental','efeito moderado','melhor para metas'],
+    snps: 'rs1815739 · ACTN3 · CT\nrs2267668 · PPARD · AG',
+    translation: 'Na visão do usuário, isso se torna “você responde bem a uma estratégia híbrida”.'
+  }
+};
+
+const orbs = document.querySelectorAll('.orb');
+const chip = document.getElementById('activeClusterChip');
+const subtitle = document.getElementById('clusterSubtitle');
+const title = document.getElementById('clusterTitle');
+const description = document.getElementById('clusterDescription');
+const confidence = document.getElementById('clusterConfidence');
+const userInsightText = document.getElementById('userInsightText');
+const clusterMeta = document.getElementById('clusterMeta');
+const actionText = document.getElementById('actionText');
+const confidenceNarrative = document.getElementById('confidenceNarrative');
+const confidenceBar = document.getElementById('confidenceBar');
+const confidenceChips = document.getElementById('confidenceChips');
+const snpList = document.getElementById('snpList');
+const productTranslation = document.getElementById('productTranslation');
+
+function renderCluster(key) {
+  const data = clusterData[key];
+  if (!data) return;
+  chip.textContent = data.chip;
+  subtitle.textContent = data.subtitle;
+  title.textContent = data.title;
+  description.textContent = data.description;
+  confidence.textContent = data.confidence;
+  userInsightText.textContent = data.userInsight;
+  clusterMeta.textContent = data.meta;
+  actionText.textContent = data.action;
+  confidenceNarrative.textContent = data.confidenceNarrative;
+  confidenceBar.style.width = data.confidence;
+  snpList.textContent = data.snps;
+  productTranslation.textContent = data.translation;
+  confidenceChips.innerHTML = data.chips.map(item => `<span class="chip">${item}</span>`).join('');
+  orbs.forEach(orb => orb.classList.toggle('active', orb.dataset.key === key));
+}
+orbs.forEach(orb => orb.addEventListener('click', () => renderCluster(orb.dataset.key)));
+</script>
+</body>
+</html>

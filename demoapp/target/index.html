@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vitacodex — Target</title>
+<style>
+:root {
+  --bg: #f4f5f5;
+  --panel: #ffffff;
+  --panel-soft: #eef2f0;
+  --text: #111111;
+  --muted: #5f6865;
+  --border: #dbe3df;
+  --green: #18c56e;
+  --green-dark: #0f8e57;
+  --green-soft: #85b8a8;
+  --orange: #f28a22;
+  --purple: #b846ff;
+  --blue: #3f6df6;
+  --teal: #12b9b2;
+  --red: #e45858;
+  --shadow: 0 10px 30px rgba(16, 24, 20, 0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #f6f7f7 0%, #f1f5f3 100%);
+  color: var(--text);
+}
+a { color: inherit; text-decoration: none; }
+.page {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 28px 28px 60px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.brand { font-size: 32px; letter-spacing: -0.05em; line-height: 1; font-weight: 400; }
+.brand .vita { color: var(--green); }
+.brand .codex { color: #0b0b0b; }
+.nav { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 12px; color: #111; opacity: 0.72; transition: .18s ease;
+}
+.nav-item:hover, .nav-item.active { opacity: 1; }
+.nav-item.active .label { color: var(--green-dark); }
+.nav-item svg { width: 50px; height: 50px; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.hero-copy {
+  padding: 30px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8f7ee;
+  color: var(--green-dark);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+h1 {
+  margin: 0 0 12px;
+  font-size: 46px;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+.hero-copy p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 56ch;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-primary { background: var(--green); color: white; }
+.btn-secondary { background: white; border: 1px solid var(--border); color: #111; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.stat {
+  background: rgba(255,255,255,.82);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat strong {
+  display: block;
+  font-size: 28px;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat span { font-size: 12px; color: var(--muted); }
+.stat.s1 strong { color: var(--green-dark); }
+.stat.s2 strong { color: var(--orange); }
+.stat.s3 strong { color: var(--blue); }
+.stat.s4 strong { color: var(--purple); }
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.section-card { padding: 22px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+.section-head span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.meta-box {
+  margin-top: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  border-radius: 10px;
+  padding: 8px 10px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.stack { display: grid; gap: 12px; }
+.signal-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: #fcfffd;
+}
+.signal-card.orange { border-left-color: var(--orange); }
+.signal-card.purple { border-left-color: var(--purple); }
+.signal-card.blue { border-left-color: var(--blue); }
+.signal-card.teal { border-left-color: var(--teal); }
+.signal-card.red { border-left-color: var(--red); }
+.signal-card h4, .signal-card h5 { margin: 0 0 6px; font-size: 16px; }
+.signal-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.pill-row, .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.pill, .chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #eef7f2;
+  color: var(--green-dark);
+  border: 1px solid #d9eee3;
+}
+.list { display: grid; gap: 10px; }
+.list-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.list-icon {
+  width: 42px; height: 42px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: #eef7f2; border: 1px solid #d9eee3; color: var(--green-dark);
+  font-size: 18px; font-weight: 700;
+}
+.list-item strong { display: block; font-size: 14px; margin-bottom: 3px; }
+.list-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.footer-cta {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.footer-cta h3 { margin: 0 0 6px; font-size: 24px; letter-spacing: -0.04em; }
+.footer-cta p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 60ch; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f8f5;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.progress {
+  margin-top: 12px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e6ece9;
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8ad8ae 0%, #18c56e 65%, #0f8e57 100%);
+}
+@media (max-width: 1140px) {
+  .hero, .section { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .topbar { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 760px) {
+  .page { padding: 18px 18px 40px; }
+  .stats { grid-template-columns: 1fr; }
+  h1 { font-size: 34px; }
+  .footer-cta { flex-direction: column; align-items: flex-start; }
+}
+
+.target-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+.target-card { border:1px solid var(--border); border-radius:20px; padding:16px; background:white; }
+.target-card h4 { margin:0 0 6px; font-size:16px; }
+.target-card p { margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
+.target-card .value { margin-top:12px; font-size:28px; font-weight:700; letter-spacing:-0.05em; }
+.target-card.green .value { color:var(--green-dark); }
+.target-card.orange .value { color:var(--orange); }
+.target-card.purple .value { color:var(--purple); }
+.slider-row { display:grid; gap:12px; }
+.slider-card { border:1px solid var(--border); border-radius:18px; padding:14px 16px; background:#fcfffd; }
+.slider-card label { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:14px; font-weight:700; }
+.slider-card small { color:var(--muted); font-weight:400; }
+.slider-card input[type=range] { width:100%; margin-top:12px; accent-color: var(--green); }
+.goal-summary {
+  background:#f8fbf9; border:1px solid var(--border); border-radius:20px; padding:18px;
+}
+.goal-summary h3 { margin:0 0 8px; font-size:18px; }
+.goal-summary p { margin:0; color:var(--muted); font-size:13px; line-height:1.6; }
+@media (max-width:900px) { .target-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="topbar">
+  <div class="brand"><span class="vita">vita</span><span class="codex">codex</span></div>
+  <nav class="nav">
+    <a class="nav-item " href="/demoapp/home">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M10 33L32 12L54 33" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 28V52H47V28" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 35C26 31.5 29 29 32 29C35 29 38 31.5 38 35C38 39 34 41 32 43C30 41 26 39 26 35Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+      </svg>
+      <div class="label">HOME</div>
+    </a>
+    <a class="nav-item " href="/demoapp/dna-explorer">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M22 10C13 18 13 46 22 54" stroke="#18c56e" stroke-width="4" stroke-linecap="round"/>
+        <path d="M42 10C51 18 51 46 42 54" stroke="#8bb8a8" stroke-width="4" stroke-linecap="round"/>
+        <path d="M23 16L41 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M41 16L23 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M27 22H37M25 32H39M27 42H37" stroke="#18c56e" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="label">DNA EXPLORER</div>
+    </a>
+    <a class="nav-item " href="/demoapp/clinical-sync">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M15 12V52H49V18L43 12H15Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M39 12V20H49" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M11 22V16C11 13.8 12.8 12 15 12H18" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M11 24V31" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M26 28H39M26 34H39M26 40H36" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M23 24C23 25.7 21.7 27 20 27C18.3 27 17 25.7 17 24C17 22.3 18.3 21 20 21C21.7 21 23 22.3 23 24Z" stroke="#18c56e" stroke-width="3"/>
+      </svg>
+      <div class="label">CLINICAL SYNC</div>
+    </a>
+    <a class="nav-item active" href="/demoapp/target">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="20" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="12" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="4" stroke="#18c56e" stroke-width="4"/>
+      </svg>
+      <div class="label">TARGET</div>
+    </a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="card hero-copy">
+    <div class="eyebrow">Target · metas orientadas por biologia</div>
+    <h1>Transforme sinais genéticos em metas concretas.</h1>
+    <p>O módulo Target pega o que foi visto no DNA Explorer e no Clinical Sync e converte em objetivos semanais. Não são metas genéricas: são metas priorizadas pela sua própria leitura biológica.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="recalculate()">Recalcular metas</button>
+      <a class="btn btn-secondary" href="/demoapp/home">Voltar para Home</a>
+    </div>
+    <div class="stats">
+      <div class="stat s1"><strong id="scoreHydration">20%</strong><span>hidratação</span></div>
+      <div class="stat s2"><strong id="scoreEnergy">68%</strong><span>energia estimada</span></div>
+      <div class="stat s3"><strong id="scoreConsistency">74%</strong><span>consistência semanal</span></div>
+      <div class="stat s4"><strong id="scorePriority">3</strong><span>metas prioritárias</span></div>
+    </div>
+  </div>
+
+  <div class="card section-card">
+    <div class="section-head"><h2>Resumo da semana</h2><span>alvo atual da Vita</span></div>
+    <div class="goal-summary" id="goalSummary">
+      <h3>Prioridade atual: corrigir hidratação e fechar lacuna de B12.</h3>
+      <p>Com base nos módulos já vistos, Vita sugere uma semana de recuperação e ajuste fino: água, rotina leve e fechamento do Clinical Sync antes de qualquer mudança mais agressiva.</p>
+    </div>
+    <div class="chips" style="margin-top:14px;">
+      <span class="chip">semana 15</span>
+      <span class="chip">baixo risco de sobrecarga</span>
+      <span class="chip">prioridade metabólica</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card section-card">
+    <div class="section-head"><h2>Metas em andamento</h2><span>simulação editável</span></div>
+    <div class="target-grid">
+      <div class="target-card green">
+        <h4>Hidratação</h4>
+        <p>Meta semanal ligada ao eixo metabólico e energia percebida.</p>
+        <div class="value" id="hydrationValue">4 / 20 L</div>
+        <div class="progress"><span id="hydrationBar" style="width:20%"></span></div>
+      </div>
+      <div class="target-card orange">
+        <h4>Atividade leve</h4>
+        <p>Ideal para esta fase enquanto B12 ainda está pendente.</p>
+        <div class="value" id="walkValue">2 / 5 caminhadas</div>
+        <div class="progress"><span id="walkBar" style="width:40%"></span></div>
+      </div>
+      <div class="target-card purple">
+        <h4>Rotina de sono</h4>
+        <p>Apoia o cluster de Neurociência e melhora resposta ao estresse.</p>
+        <div class="value" id="sleepValue">5 / 7 noites</div>
+        <div class="progress"><span id="sleepBar" style="width:71%"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card section-card">
+    <div class="section-head"><h2>Ajuste de metas</h2><span>interação simulada</span></div>
+    <div class="slider-row">
+      <div class="slider-card">
+        <label>Água por semana <small id="waterTargetLabel">20 litros</small></label>
+        <input id="waterTarget" type="range" min="10" max="30" value="20" oninput="updateTargets()">
+      </div>
+      <div class="slider-card">
+        <label>Caminhadas por semana <small id="walkTargetLabel">5 caminhadas</small></label>
+        <input id="walkTarget" type="range" min="2" max="7" value="5" oninput="updateTargets()">
+      </div>
+      <div class="slider-card">
+        <label>Noites com sono consistente <small id="sleepTargetLabel">7 noites</small></label>
+        <input id="sleepTarget" type="range" min="4" max="7" value="7" oninput="updateTargets()">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="footer-cta card">
+  <div>
+    <h3>Target é onde a biologia encontra comportamento.</h3>
+    <p>Depois de organizar SNPs e exames, o sistema precisa virar hábito. Esse módulo traduz interpretação em meta semanal, progresso e ajuste.</p>
+  </div>
+  <div class="hero-actions" style="margin-top:0;">
+    <a class="btn btn-secondary" href="/demoapp/clinical-sync">Abrir Clinical Sync</a>
+    <a class="btn btn-primary" href="/demoapp/home">Voltar para Home</a>
+  </div>
+</section>
+</div>
+
+<script>
+const state = {
+  currentWater: 4,
+  currentWalk: 2,
+  currentSleep: 5
+};
+
+function updateTargets() {
+  const waterTarget = parseInt(document.getElementById('waterTarget').value, 10);
+  const walkTarget = parseInt(document.getElementById('walkTarget').value, 10);
+  const sleepTarget = parseInt(document.getElementById('sleepTarget').value, 10);
+
+  document.getElementById('waterTargetLabel').textContent = waterTarget + ' litros';
+  document.getElementById('walkTargetLabel').textContent = walkTarget + ' caminhadas';
+  document.getElementById('sleepTargetLabel').textContent = sleepTarget + ' noites';
+
+  const waterPct = Math.round((state.currentWater / waterTarget) * 100);
+  const walkPct = Math.round((state.currentWalk / walkTarget) * 100);
+  const sleepPct = Math.round((state.currentSleep / sleepTarget) * 100);
+
+  document.getElementById('hydrationValue').textContent = state.currentWater + ' / ' + waterTarget + ' L';
+  document.getElementById('walkValue').textContent = state.currentWalk + ' / ' + walkTarget + ' caminhadas';
+  document.getElementById('sleepValue').textContent = state.currentSleep + ' / ' + sleepTarget + ' noites';
+
+  document.getElementById('hydrationBar').style.width = Math.min(waterPct, 100) + '%';
+  document.getElementById('walkBar').style.width = Math.min(walkPct, 100) + '%';
+  document.getElementById('sleepBar').style.width = Math.min(sleepPct, 100) + '%';
+
+  document.getElementById('scoreHydration').textContent = Math.min(waterPct, 100) + '%';
+  document.getElementById('scoreConsistency').textContent = Math.round((walkPct + sleepPct) / 2) + '%';
+}
+
+function recalculate() {
+  const waterTarget = parseInt(document.getElementById('waterTarget').value, 10);
+  const walkTarget = parseInt(document.getElementById('walkTarget').value, 10);
+  const sleepTarget = parseInt(document.getElementById('sleepTarget').value, 10);
+
+  let priority = 'Prioridade atual: corrigir hidratação e fechar lacuna de B12.';
+  let body = 'Com base nos módulos já vistos, Vita sugere uma semana de recuperação e ajuste fino: água, rotina leve e fechamento do Clinical Sync antes de qualquer mudança mais agressiva.';
+
+  if (waterTarget <= 16 && walkTarget >= 5) {
+    priority = 'Prioridade atual: equilibrar energia sem subir a carga cedo demais.';
+    body = 'Você está mirando menos água e mais movimento. Vita sugere manter o treino leve e evitar compensar a baixa hidratação com sobrecarga física.';
+  } else if (sleepTarget <= 5) {
+    priority = 'Prioridade atual: proteger sono antes de intensificar qualquer meta.';
+    body = 'O cluster de Neurociência fica mais vulnerável quando o sono sai do foco. Vita sugere recolocar consistência do descanso no centro da semana.';
+  }
+
+  document.getElementById('goalSummary').innerHTML = '<h3>' + priority + '</h3><p>' + body + '</p>';
+}
+
+updateTargets();
+</script>
+</body>
+</html>

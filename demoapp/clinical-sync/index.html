@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vitacodex — Clinical Sync</title>
+<style>
+:root {
+  --bg: #f4f5f5;
+  --panel: #ffffff;
+  --panel-soft: #eef2f0;
+  --text: #111111;
+  --muted: #5f6865;
+  --border: #dbe3df;
+  --green: #18c56e;
+  --green-dark: #0f8e57;
+  --green-soft: #85b8a8;
+  --orange: #f28a22;
+  --purple: #b846ff;
+  --blue: #3f6df6;
+  --teal: #12b9b2;
+  --red: #e45858;
+  --shadow: 0 10px 30px rgba(16, 24, 20, 0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #f6f7f7 0%, #f1f5f3 100%);
+  color: var(--text);
+}
+a { color: inherit; text-decoration: none; }
+.page {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 28px 28px 60px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.brand { font-size: 32px; letter-spacing: -0.05em; line-height: 1; font-weight: 400; }
+.brand .vita { color: var(--green); }
+.brand .codex { color: #0b0b0b; }
+.nav { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 12px; color: #111; opacity: 0.72; transition: .18s ease;
+}
+.nav-item:hover, .nav-item.active { opacity: 1; }
+.nav-item.active .label { color: var(--green-dark); }
+.nav-item svg { width: 50px; height: 50px; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.hero-copy {
+  padding: 30px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8f7ee;
+  color: var(--green-dark);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+h1 {
+  margin: 0 0 12px;
+  font-size: 46px;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+.hero-copy p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 56ch;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-primary { background: var(--green); color: white; }
+.btn-secondary { background: white; border: 1px solid var(--border); color: #111; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.stat {
+  background: rgba(255,255,255,.82);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat strong {
+  display: block;
+  font-size: 28px;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat span { font-size: 12px; color: var(--muted); }
+.stat.s1 strong { color: var(--green-dark); }
+.stat.s2 strong { color: var(--orange); }
+.stat.s3 strong { color: var(--blue); }
+.stat.s4 strong { color: var(--purple); }
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.section-card { padding: 22px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+.section-head span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.meta-box {
+  margin-top: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  border-radius: 10px;
+  padding: 8px 10px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.stack { display: grid; gap: 12px; }
+.signal-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: #fcfffd;
+}
+.signal-card.orange { border-left-color: var(--orange); }
+.signal-card.purple { border-left-color: var(--purple); }
+.signal-card.blue { border-left-color: var(--blue); }
+.signal-card.teal { border-left-color: var(--teal); }
+.signal-card.red { border-left-color: var(--red); }
+.signal-card h4, .signal-card h5 { margin: 0 0 6px; font-size: 16px; }
+.signal-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.pill-row, .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.pill, .chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #eef7f2;
+  color: var(--green-dark);
+  border: 1px solid #d9eee3;
+}
+.list { display: grid; gap: 10px; }
+.list-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.list-icon {
+  width: 42px; height: 42px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: #eef7f2; border: 1px solid #d9eee3; color: var(--green-dark);
+  font-size: 18px; font-weight: 700;
+}
+.list-item strong { display: block; font-size: 14px; margin-bottom: 3px; }
+.list-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.footer-cta {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.footer-cta h3 { margin: 0 0 6px; font-size: 24px; letter-spacing: -0.04em; }
+.footer-cta p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 60ch; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f8f5;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.progress {
+  margin-top: 12px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e6ece9;
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8ad8ae 0%, #18c56e 65%, #0f8e57 100%);
+}
+@media (max-width: 1140px) {
+  .hero, .section { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .topbar { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 760px) {
+  .page { padding: 18px 18px 40px; }
+  .stats { grid-template-columns: 1fr; }
+  h1 { font-size: 34px; }
+  .footer-cta { flex-direction: column; align-items: flex-start; }
+}
+
+.upload-zone {
+  border: 1.5px dashed #b9d9ca;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #fcfffd 0%, #f3faf6 100%);
+  padding: 28px;
+  text-align: center;
+  transition: .2s ease;
+  cursor: pointer;
+}
+.upload-zone:hover { border-color: var(--green); }
+.upload-icon {
+  width: 72px; height: 72px; border-radius: 22px; margin: 0 auto 14px;
+  display:grid; place-items:center; background:#e8f7ee; color:var(--green-dark);
+}
+.progress-wrap { display:none; margin-top:16px; }
+.progress-label { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:6px; }
+.lab-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+.lab-card {
+  border:1px solid var(--border); border-radius:18px; padding:14px; background:#fff;
+}
+.lab-card strong { display:block; font-size:14px; margin-bottom:4px; }
+.lab-card p { margin:0; color:var(--muted); font-size:12px; line-height:1.5; }
+.result-pill {
+  margin-top:10px; display:inline-flex; padding:6px 10px; border-radius:999px; font-size:11px; font-weight:700;
+  background:#eef7f2; color:var(--green-dark); border:1px solid #d9eee3;
+}
+.result-pill.alert { background:#fff4ea; color:#9c5712; border-color:#f4d6b7; }
+@media (max-width:760px) { .lab-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="topbar">
+  <div class="brand"><span class="vita">vita</span><span class="codex">codex</span></div>
+  <nav class="nav">
+    <a class="nav-item " href="/demoapp/home">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M10 33L32 12L54 33" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 28V52H47V28" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 35C26 31.5 29 29 32 29C35 29 38 31.5 38 35C38 39 34 41 32 43C30 41 26 39 26 35Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+      </svg>
+      <div class="label">HOME</div>
+    </a>
+    <a class="nav-item " href="/demoapp/dna-explorer">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M22 10C13 18 13 46 22 54" stroke="#18c56e" stroke-width="4" stroke-linecap="round"/>
+        <path d="M42 10C51 18 51 46 42 54" stroke="#8bb8a8" stroke-width="4" stroke-linecap="round"/>
+        <path d="M23 16L41 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M41 16L23 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M27 22H37M25 32H39M27 42H37" stroke="#18c56e" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="label">DNA EXPLORER</div>
+    </a>
+    <a class="nav-item active" href="/demoapp/clinical-sync">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M15 12V52H49V18L43 12H15Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M39 12V20H49" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M11 22V16C11 13.8 12.8 12 15 12H18" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M11 24V31" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M26 28H39M26 34H39M26 40H36" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M23 24C23 25.7 21.7 27 20 27C18.3 27 17 25.7 17 24C17 22.3 18.3 21 20 21C21.7 21 23 22.3 23 24Z" stroke="#18c56e" stroke-width="3"/>
+      </svg>
+      <div class="label">CLINICAL SYNC</div>
+    </a>
+    <a class="nav-item " href="/demoapp/target">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="20" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="12" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="4" stroke="#18c56e" stroke-width="4"/>
+      </svg>
+      <div class="label">TARGET</div>
+    </a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="card hero-copy">
+    <div class="eyebrow">Clinical Sync · exames + genética</div>
+    <h1>Sincronize exames para transformar tendência genética em contexto real.</h1>
+    <p>O DNA sugere possibilidades. O Clinical Sync confirma, refina e prioriza. Este módulo foi pensado para conectar resultados laboratoriais a clusters genéticos e mudar a qualidade da recomendação.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="simulateUpload()">Sincronizar exame</button>
+      <a class="btn btn-secondary" href="/demoapp/home">Voltar para Home</a>
+    </div>
+    <div class="stats">
+      <div class="stat s1"><strong>4</strong><span>exames sincronizados</span></div>
+      <div class="stat s2"><strong>1</strong><span>exame pendente</span></div>
+      <div class="stat s3"><strong>3</strong><span>alertas refinados</span></div>
+      <div class="stat s4"><strong>92%</strong><span>ganho de precisão</span></div>
+    </div>
+  </div>
+
+  <div class="card section-card">
+    <div class="section-head"><h2>Envio de exame</h2><span>simulação de fluxo</span></div>
+    <div class="upload-zone" onclick="simulateUpload()">
+      <div class="upload-icon">
+        <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+          <rect x="4" y="4" width="32" height="32" rx="8" stroke="#18c56e" stroke-width="1.7" stroke-dasharray="4 3"/>
+          <path d="M20 26V14M14 20l6-6 6 6" stroke="#18c56e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <strong style="display:block; font-size:16px; margin-bottom:6px;">Arraste o PDF ou imagem do exame aqui</strong>
+      <p style="margin:0; color:var(--muted); font-size:13px; line-height:1.6;">B12, ferro, vitamina D, colesterol, glicemia — o Clinical Sync cruza o resultado com os clusters ativos do seu perfil.</p>
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-label"><span id="progressText">Lendo exame...</span><span id="progressPct">0%</span></div>
+        <div class="progress"><span id="progressBar" style="width:0%"></span></div>
+      </div>
+    </div>
+    <div class="meta-box">exame_1156_b12.pdf
+status atual: pendente
+impacto estimado: alto no cluster de Micronutrientes e Energia</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="card section-card">
+    <div class="section-head"><h2>Exames conectados</h2><span>mock de resultados</span></div>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <strong>Vitamina B12</strong>
+        <p>Resultado mais recente ainda não enviado. Esse é o principal exame faltante para refinar energia, humor e micronutrientes.</p>
+        <div class="result-pill alert">pendente</div>
+      </div>
+      <div class="lab-card">
+        <strong>25(OH) Vitamina D</strong>
+        <p>Levemente abaixo do alvo. O cluster de Micronutrientes sugere acompanhar antes de decisão de suplementação agressiva.</p>
+        <div class="result-pill">sincronizado</div>
+      </div>
+      <div class="lab-card">
+        <strong>Triglicérides</strong>
+        <p>Resultado dentro da faixa, mas ainda relevante por causa do cluster Cardiovascular. O dado ajuda a calibrar risco real.</p>
+        <div class="result-pill">sincronizado</div>
+      </div>
+      <div class="lab-card">
+        <strong>Glicemia de jejum</strong>
+        <p>Resultado usado para dar contexto ao cluster Metabolismo. A leitura genética fica mais útil quando confirma tendência em exame.</p>
+        <div class="result-pill">sincronizado</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card section-card">
+    <div class="section-head"><h2>Impacto no produto</h2><span>como o módulo ajuda a Vita</span></div>
+    <div class="stack">
+      <div class="signal-card blue">
+        <h4>Genética sem exame = hipótese</h4>
+        <p>O DNA Explorer aponta direção. O Clinical Sync transforma essa direção em contexto mensurável.</p>
+      </div>
+      <div class="signal-card">
+        <h4>Exame + cluster = confiança maior</h4>
+        <p>Quando um resultado laboratorial confirma um eixo genético, a recomendação sobe de força e desce de incerteza.</p>
+      </div>
+      <div class="signal-card orange">
+        <h4>Vita prioriza melhor</h4>
+        <p>Sem o exame de B12, Vita fala “vale investigar”. Com o exame, ela pode dizer “corrigir isso é prioridade real desta semana”.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="footer-cta card">
+  <div>
+    <h3>Clinical Sync não substitui genética. Ele fecha o circuito.</h3>
+    <p>Esse módulo foi pensado para reduzir erro de interpretação, aumentar confiança e transformar o Vitacodex em um sistema de decisão mais maduro.</p>
+  </div>
+  <div class="hero-actions" style="margin-top:0;">
+    <a class="btn btn-secondary" href="/demoapp/dna-explorer">Ver DNA Explorer</a>
+    <a class="btn btn-primary" href="/demoapp/target">Atualizar Target</a>
+  </div>
+</section>
+</div>
+
+<script>
+function simulateUpload() {
+  const wrap = document.getElementById('progressWrap');
+  const text = document.getElementById('progressText');
+  const pct = document.getElementById('progressPct');
+  const bar = document.getElementById('progressBar');
+  wrap.style.display = 'block';
+  let p = 0;
+  const msgs = ['Lendo arquivo...', 'Extraindo marcador clínico...', 'Mapeando ao cluster...', 'Atualizando confiança...', 'Concluído'];
+  const iv = setInterval(() => {
+    p = Math.min(100, p + Math.random() * 22);
+    const round = Math.round(p);
+    pct.textContent = round + '%';
+    bar.style.width = round + '%';
+    text.textContent = msgs[Math.min(Math.floor(round / 25), 4)];
+    if (p >= 100) clearInterval(iv);
+  }, 260);
+}
+</script>
+</body>
+</html>

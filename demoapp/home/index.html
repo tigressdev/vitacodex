@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vitacodex — Home</title>
+<style>
+:root {
+  --bg: #f4f5f5;
+  --panel: #ffffff;
+  --panel-soft: #eef2f0;
+  --text: #111111;
+  --muted: #5f6865;
+  --border: #dbe3df;
+  --green: #18c56e;
+  --green-dark: #0f8e57;
+  --green-soft: #85b8a8;
+  --orange: #f28a22;
+  --purple: #b846ff;
+  --blue: #3f6df6;
+  --teal: #12b9b2;
+  --red: #e45858;
+  --shadow: 0 10px 30px rgba(16, 24, 20, 0.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, #f6f7f7 0%, #f1f5f3 100%);
+  color: var(--text);
+}
+a { color: inherit; text-decoration: none; }
+.page {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 28px 28px 60px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.brand { font-size: 32px; letter-spacing: -0.05em; line-height: 1; font-weight: 400; }
+.brand .vita { color: var(--green); }
+.brand .codex { color: #0b0b0b; }
+.nav { display: flex; gap: 30px; align-items: center; flex-wrap: wrap; }
+.nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-size: 12px; color: #111; opacity: 0.72; transition: .18s ease;
+}
+.nav-item:hover, .nav-item.active { opacity: 1; }
+.nav-item.active .label { color: var(--green-dark); }
+.nav-item svg { width: 50px; height: 50px; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.hero-copy {
+  padding: 30px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #e8f7ee;
+  color: var(--green-dark);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+h1 {
+  margin: 0 0 12px;
+  font-size: 46px;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+.hero-copy p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 56ch;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-primary { background: var(--green); color: white; }
+.btn-secondary { background: white; border: 1px solid var(--border); color: #111; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.stat {
+  background: rgba(255,255,255,.82);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.stat strong {
+  display: block;
+  font-size: 28px;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat span { font-size: 12px; color: var(--muted); }
+.stat.s1 strong { color: var(--green-dark); }
+.stat.s2 strong { color: var(--orange); }
+.stat.s3 strong { color: var(--blue); }
+.stat.s4 strong { color: var(--purple); }
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.section-card { padding: 22px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+.section-head span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.meta-box {
+  margin-top: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  background: var(--panel-soft);
+  border-radius: 10px;
+  padding: 8px 10px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.stack { display: grid; gap: 12px; }
+.signal-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: #fcfffd;
+}
+.signal-card.orange { border-left-color: var(--orange); }
+.signal-card.purple { border-left-color: var(--purple); }
+.signal-card.blue { border-left-color: var(--blue); }
+.signal-card.teal { border-left-color: var(--teal); }
+.signal-card.red { border-left-color: var(--red); }
+.signal-card h4, .signal-card h5 { margin: 0 0 6px; font-size: 16px; }
+.signal-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.pill-row, .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.pill, .chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #eef7f2;
+  color: var(--green-dark);
+  border: 1px solid #d9eee3;
+}
+.list { display: grid; gap: 10px; }
+.list-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.list-icon {
+  width: 42px; height: 42px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: #eef7f2; border: 1px solid #d9eee3; color: var(--green-dark);
+  font-size: 18px; font-weight: 700;
+}
+.list-item strong { display: block; font-size: 14px; margin-bottom: 3px; }
+.list-item p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.footer-cta {
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f7f4 100%);
+}
+.footer-cta h3 { margin: 0 0 6px; font-size: 24px; letter-spacing: -0.04em; }
+.footer-cta p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; max-width: 60ch; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f3f8f5;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+.progress {
+  margin-top: 12px;
+  height: 10px;
+  border-radius: 999px;
+  background: #e6ece9;
+  overflow: hidden;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8ad8ae 0%, #18c56e 65%, #0f8e57 100%);
+}
+@media (max-width: 1140px) {
+  .hero, .section { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .topbar { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 760px) {
+  .page { padding: 18px 18px 40px; }
+  .stats { grid-template-columns: 1fr; }
+  h1 { font-size: 34px; }
+  .footer-cta { flex-direction: column; align-items: flex-start; }
+}
+
+.layout { display:grid; grid-template-columns: 290px minmax(0,1fr); gap:24px; }
+.sidebar,.main-panel { background:var(--panel); border:1px solid var(--border); border-radius:26px; box-shadow:var(--shadow); }
+.sidebar { padding:24px 20px; display:flex; flex-direction:column; gap:18px; min-height:740px; }
+.main-panel { padding:26px; min-height:740px; display:flex; flex-direction:column; gap:20px; }
+.agent-card { display:flex; align-items:center; gap:14px; }
+.agent-icon { width:68px; height:68px; }
+.agent-meta h3 { margin:0; font-size:16px; font-weight:700; }
+.agent-meta p { margin:4px 0 0; color:var(--green-dark); font-size:14px; }
+.welcome { font-size:18px; line-height:1.25; margin-top:4px; }
+.welcome strong { font-size:22px; }
+.score-card {
+  background: linear-gradient(180deg, #f8fbf9 0%, #eef6f2 100%);
+  border:1px solid var(--border); border-radius:22px; padding:18px;
+}
+.score-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.ring-wrap { display:flex; align-items:center; gap:16px; margin:14px 0 10px; }
+.ring { position:relative; width:112px; height:112px; border-radius:50%; background:conic-gradient(var(--green) 0 72%, #dce7e2 72% 100%); display:grid; place-items:center; }
+.ring::before { content:''; width:74px; height:74px; border-radius:50%; background:white; border:1px solid var(--border); position:absolute; }
+.ring-value { position:relative; text-align:center; z-index:1; }
+.ring-value strong { display:block; font-size:28px; line-height:1; letter-spacing:-0.04em; }
+.ring-value span { font-size:11px; color:var(--muted); }
+.score-copy { font-size:13px; color:var(--muted); line-height:1.55; }
+.mini-list { display:grid; gap:10px; margin-top:8px; }
+.mini-item { background:var(--panel-soft); border-radius:14px; padding:12px 12px; }
+.mini-item strong { display:block; font-size:13px; margin-bottom:4px; }
+.mini-item span { font-size:12px; color:var(--muted); line-height:1.45; }
+.focus-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px; }
+.focus-item { background:white; border:1px solid var(--border); border-radius:16px; padding:14px; }
+.focus-item .k { font-size:12px; text-transform:uppercase; color:var(--muted); letter-spacing:.04em; margin-bottom:8px; display:block; }
+.focus-item strong { font-size:15px; display:block; margin-bottom:4px; }
+.focus-item small { color:var(--muted); font-size:12px; }
+@media (max-width:1080px) { .layout { grid-template-columns:1fr; } .focus-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="topbar">
+  <div class="brand"><span class="vita">vita</span><span class="codex">codex</span></div>
+  <nav class="nav">
+    <a class="nav-item active" href="/demoapp/home">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M10 33L32 12L54 33" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M17 28V52H47V28" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 35C26 31.5 29 29 32 29C35 29 38 31.5 38 35C38 39 34 41 32 43C30 41 26 39 26 35Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+      </svg>
+      <div class="label">HOME</div>
+    </a>
+    <a class="nav-item " href="/demoapp/dna-explorer">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M22 10C13 18 13 46 22 54" stroke="#18c56e" stroke-width="4" stroke-linecap="round"/>
+        <path d="M42 10C51 18 51 46 42 54" stroke="#8bb8a8" stroke-width="4" stroke-linecap="round"/>
+        <path d="M23 16L41 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M41 16L23 48" stroke="#18c56e" stroke-width="4"/>
+        <path d="M27 22H37M25 32H39M27 42H37" stroke="#18c56e" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="label">DNA EXPLORER</div>
+    </a>
+    <a class="nav-item " href="/demoapp/clinical-sync">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M15 12V52H49V18L43 12H15Z" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M39 12V20H49" stroke="#18c56e" stroke-width="3.2" stroke-linejoin="round"/>
+        <path d="M11 22V16C11 13.8 12.8 12 15 12H18" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M11 24V31" stroke="#8bb8a8" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M26 28H39M26 34H39M26 40H36" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M23 24C23 25.7 21.7 27 20 27C18.3 27 17 25.7 17 24C17 22.3 18.3 21 20 21C21.7 21 23 22.3 23 24Z" stroke="#18c56e" stroke-width="3"/>
+      </svg>
+      <div class="label">CLINICAL SYNC</div>
+    </a>
+    <a class="nav-item " href="/demoapp/target">
+      <svg viewBox="0 0 64 64" fill="none">
+        <circle cx="32" cy="32" r="20" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="12" stroke="#18c56e" stroke-width="4"/>
+        <circle cx="32" cy="32" r="4" stroke="#18c56e" stroke-width="4"/>
+      </svg>
+      <div class="label">TARGET</div>
+    </a>
+  </nav>
+</header>
+
+<section class="layout">
+  <aside class="sidebar">
+    <div class="agent-card">
+      <svg class="agent-icon" viewBox="0 0 96 96" fill="none">
+        <circle cx="48" cy="48" r="40" stroke="#8bb8a8" stroke-width="2"/>
+        <path d="M19 61A33 33 0 0 1 17 48C17 30.9 30.9 17 48 17" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M77 35A33 33 0 0 1 79 48C79 65.1 65.1 79 48 79" stroke="#18c56e" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M48 69C44 63 40 60 34 57C29 55 24 55 20 55" stroke="#0f8e57" stroke-width="3" stroke-linecap="round"/>
+        <path d="M48 69C52 63 56 60 62 57C67 55 72 55 76 55" stroke="#0f8e57" stroke-width="3" stroke-linecap="round"/>
+        <path d="M48 69V43" stroke="#0f8e57" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M48 43L38 30" stroke="#0f8e57" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M48 43L58 30" stroke="#0f8e57" stroke-width="3.2" stroke-linecap="round"/>
+      </svg>
+      <div class="agent-meta">
+        <h3>Vita</h3>
+        <p>genomic copilot</p>
+      </div>
+    </div>
+    <div class="welcome">Olá, <strong>Carolina!</strong></div>
+    <div class="score-card">
+      <div class="score-header">
+        <div class="kicker">Vita Score</div>
+        <div class="badge">↗ +3 esta semana</div>
+      </div>
+      <div class="ring-wrap">
+        <div class="ring">
+          <div class="ring-value"><strong>72</strong><span>/ 100</span></div>
+        </div>
+        <div class="score-copy">Seu estado geral está estável, mas há um alerta nutricional que pode afetar energia e adesão às metas desta semana.</div>
+      </div>
+    </div>
+    <div>
+      <div class="kicker" style="margin-bottom:10px;">Prioridades da semana</div>
+      <div class="mini-list">
+        <div class="mini-item"><strong>Vitamina B12 pendente</strong><span>Você ainda não sincronizou o exame #1156 do Clinical Sync.</span></div>
+        <div class="mini-item"><strong>Hidratação baixa</strong><span>4 litros de 20 previstos na meta W15-04.</span></div>
+        <div class="mini-item"><strong>Atividade leve favorecida</strong><span>Boa semana para caminhada diurna no início do outono.</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-panel">
+    <section class="hero">
+      <div class="hero-copy card" style="box-shadow:none;">
+        <h1>Seu DNA vira decisão.</h1>
+        <p>O Vitacodex combina genética, exames e metas para transformar sinais biológicos em prioridades práticas. Em vez de mostrar apenas SNPs, ele interpreta impacto, risco e próxima ação.</p>
+        <div class="focus-grid">
+          <div class="focus-item"><span class="k">Foco</span><strong>Energia & B12</strong><small>Alertas ativos nesta semana</small></div>
+          <div class="focus-item"><span class="k">Meta</span><strong>Hidratação 20%</strong><small>4 de 20 litros concluídos</small></div>
+          <div class="focus-item"><span class="k">Ajuste</span><strong>Caminhada diurna</strong><small>Melhor aderência nesta fase</small></div>
+        </div>
+      </div>
+      <div class="hero-copy card" style="box-shadow:none; background:#f3f8f5;">
+        <div class="eyebrow">Vita diz</div>
+        <h1 style="font-size:24px;">Seu perfil indica queda de energia se o eixo B12 continuar sem atualização.</h1>
+        <p>Você já tem base genética suficiente para recomendações iniciais, mas o próximo ganho de precisão depende do envio do exame recente.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/demoapp/clinical-sync">Enviar exame B12</a>
+          <a class="btn btn-secondary" href="/demoapp/dna-explorer">Abrir DNA Explorer</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat s1"><strong>32</strong><span>SNPs avaliados</span></div>
+      <div class="stat s2"><strong>4</strong><span>Exames sincronizados</span></div>
+      <div class="stat s3"><strong>20</strong><span>Sinais inteligentes da semana</span></div>
+      <div class="stat s4"><strong>6</strong><span>Metas em andamento</span></div>
+    </section>
+
+    <section class="section">
+      <div class="card section-card">
+        <div class="section-head"><h2>Sinais prioritários</h2><span>semana 15</span></div>
+        <div class="stack">
+          <div class="signal-card"><h4>Baixa B12 potencialmente relevante</h4><div class="meta-box">Clinical Sync #1156 · exame pendente · dependência de confirmação laboratorial</div><p>Seu perfil atual sugere que a ausência desse exame limita recomendações de energia e recuperação.</p></div>
+          <div class="signal-card orange"><h4>Meta de hidratação abaixo do ideal</h4><div class="meta-box">Target W15-04 · 4 / 20 litros · progresso 20%</div><p>Seu desempenho semanal está sendo puxado para baixo por baixa aderência hídrica.</p></div>
+          <div class="signal-card purple"><h4>Rotina leve favorecida esta semana</h4><div class="meta-box">início de outono · recomendação contextual da Vita</div><p>Em vez de intensificar carga, Vita prioriza caminhada diurna e consistência.</p></div>
+        </div>
+      </div>
+      <div class="card section-card">
+        <div class="section-head"><h2>Próximos passos</h2><span>ação prática</span></div>
+        <div class="list">
+          <div class="list-item"><div class="list-icon">1</div><div><strong>Sincronize o exame de B12</strong><p>Sem esse dado, a interpretação de energia e micronutrientes fica parcialmente cega.</p></div></div>
+          <div class="list-item"><div class="list-icon">2</div><div><strong>Explore o DNA Explorer</strong><p>Abra os clusters genéticos e veja como os SNPs foram organizados por função biológica.</p></div></div>
+          <div class="list-item"><div class="list-icon">3</div><div><strong>Atualize metas</strong><p>Recalibre o alvo semanal e acompanhe evolução no módulo Target.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-cta card">
+      <div>
+        <h3>Vitacodex como sistema vivo.</h3>
+        <p>Navegue entre Home, DNA Explorer, Clinical Sync e Target como se fosse um app real em evolução.</p>
+      </div>
+      <div class="hero-actions" style="margin-top:0;">
+        <a class="btn btn-secondary" href="/demoapp/dna-explorer">Ir para DNA Explorer</a>
+        <a class="btn btn-primary" href="/demoapp/target">Abrir Target</a>
+      </div>
+    </section>
+  </main>
+</section>
+</div>
+</body>
+</html>
